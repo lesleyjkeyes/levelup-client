@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import Router from 'next/router';
+import { Button } from 'react-bootstrap';
 import EventCard from '../../components/event/EventCard';
 import { getEvents } from '../../utils/data/eventData';
 
@@ -11,6 +13,12 @@ function Home() {
 
   return (
     <article className="events">
+      <Button onClick={() => {
+        Router.push('/events/new');
+      }}
+      >
+        Register New Event
+      </Button>
       <h1>Events</h1>
       {events.map((event) => (
         <section key={`event--${event.id}`} className="event">
