@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import Router from 'next/router';
+import { deleteEvent } from '../../utils/data/eventData';
 
 const EventCard = ({
   description,
@@ -9,6 +10,8 @@ const EventCard = ({
   time,
   organizer,
   eventId,
+  // eslint-disable-next-line react/prop-types
+  refresh,
 }) => (
   <Card className="text-center">
     <Card.Header>{description}</Card.Header>
@@ -23,6 +26,14 @@ const EventCard = ({
       }}
     >
       Update Event
+    </Button>
+    <Button
+      onClick={() => {
+        deleteEvent(eventId);
+        refresh();
+      }}
+    >
+      Delete Event
     </Button>
   </Card>
 );

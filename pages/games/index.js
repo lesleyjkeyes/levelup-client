@@ -7,9 +7,15 @@ import { getGames } from '../../utils/data/gameData';
 function Home() {
   const [games, setGames] = useState([]);
 
-  useEffect(() => {
+  const getAndSetGames = () => {
     getGames().then((data) => setGames(data));
+  };
+
+  useEffect(() => {
+    getAndSetGames();
   }, []);
+
+  const refresh = () => getAndSetGames();
 
   return (
     <article className="games">
@@ -23,7 +29,7 @@ function Home() {
       </Button>
       {games.map((game) => (
         <section key={`game--${game.id}`} className="game">
-          <GameCard title={game.title} maker={game.maker} numberOfPlayers={game.number_of_players} skillLevel={game.skill_level} gameId={game.id} />
+          <GameCard title={game.title} maker={game.maker} numberOfPlayers={game.number_of_players} skillLevel={game.skill_level} gameId={game.id} refresh={refresh} />
         </section>
       ))}
     </article>

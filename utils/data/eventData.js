@@ -18,13 +18,18 @@ const createEvent = (event) => {
 };
 
 const updateEvent = (event) => {
-  console.warn(event);
   fetch(`${clientCredentials.databaseURL}events/${event.id}`, {
     method: 'PUT',
     body: JSON.stringify(event),
     headers: {
       'content-type': 'application/json',
     },
+  });
+};
+
+const deleteEvent = (eventId) => {
+  fetch(`${clientCredentials.databaseURL}events/${eventId}`, {
+    method: 'DELETE',
   });
 };
 
@@ -37,5 +42,5 @@ const getSingleEvent = (eventId) => new Promise((resolve, reject) => {
 
 // eslint-disable-next-line import/prefer-default-export
 export {
-  getEvents, createEvent, updateEvent, getSingleEvent,
+  getEvents, createEvent, updateEvent, getSingleEvent, deleteEvent,
 };
