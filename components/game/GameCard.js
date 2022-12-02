@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import Router from 'next/router';
+import { deleteGame } from '../../utils/data/gameData';
 
 const GameCard = ({
   title, //
@@ -9,6 +10,8 @@ const GameCard = ({
   numberOfPlayers,
   skillLevel,
   gameId,
+  // eslint-disable-next-line react/prop-types
+  refresh,
 }) => (
   <Card className="text-center">
     <Card.Header>{title}</Card.Header>
@@ -23,6 +26,14 @@ const GameCard = ({
       }}
     >
       Update Game
+    </Button>
+    <Button
+      onClick={() => {
+        deleteGame(gameId);
+        refresh();
+      }}
+    >
+      Delete Game
     </Button>
   </Card>
 );
