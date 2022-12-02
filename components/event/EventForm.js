@@ -2,10 +2,10 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { createEvent } from '../../utils/data/eventData';
+import { createEvent, updateEvent } from '../../utils/data/eventData';
 import { getGames } from '../../utils/data/gameData';
 
-const EventForm = ({ user }) => {
+const EventForm = ({ user, eventObj }) => {
   const [games, setGames] = useState([]);
   /*
   Since the input fields are bound to the values of
@@ -24,6 +24,18 @@ const EventForm = ({ user }) => {
     getGames().then(setGames);
   }, []);
 
+  useEffect(() => {
+    if (eventObj?.id) {
+      setCurrentEvent({
+        description: eventObj.description,
+        id: eventObj.id,
+        game: eventObj.game.id,
+        date: eventObj.date,
+        time: eventObj.time,
+      });
+    }
+  }, [eventObj]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCurrentEvent((prevState) => ({
@@ -33,19 +45,21 @@ const EventForm = ({ user }) => {
   };
 
   const handleSubmit = (e) => {
-    // Prevent form from being submitted
     e.preventDefault();
-
-    const event = {
-      game: currentEvent.game,
-      description: currentEvent.description,
-      date: currentEvent.date,
-      time: currentEvent.time,
-      uid: user.uid,
-    };
-
-    // Send POST request to your API
-    createEvent(event).then(() => router.push('/events'));
+    if (eventObj?.id) {
+      updateEvent(currentEvent);
+      router.push(`/events/${currentEvent.id}`);
+    } else {
+      const event = {
+        game: Number(currentEvent.game),
+        description: currentEvent.description,
+        date: currentEvent.date,
+        time: currentEvent.time,
+        uid: user.uid,
+      };
+      createEvent(event);
+      router.push('/events');
+    }
   };
 
   return (
@@ -97,6 +111,14 @@ const EventForm = ({ user }) => {
 EventForm.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string.isRequired,
+  }).isRequired,
+  eventObj: PropTypes.shape({
+    game: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    time: PropTypes.string.isRequired,
+    organizer: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
   }).isRequired,
 };
 

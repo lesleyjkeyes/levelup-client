@@ -54,11 +54,12 @@ const GameForm = ({ user, gameObj }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (gameObj.id) {
+    if (gameObj?.id) {
       updateGame(currentGame);
-      router.push('/games');
+      router.push(`/games/${gameObj.id}`);
     } else {
       const game = {
+
         maker: currentGame.maker,
         title: currentGame.title,
         number_of_players: Number(currentGame.number_of_players),
@@ -66,9 +67,8 @@ const GameForm = ({ user, gameObj }) => {
         game_type: Number(currentGame.game_type),
         uid: user.uid,
       };
-      createGame(game).then(() => {
-        router.push('/games');
-      });
+      createGame(game);
+      router.push('/games');
     }
   };
 

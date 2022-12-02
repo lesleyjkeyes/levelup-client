@@ -17,5 +17,25 @@ const createEvent = (event) => {
   });
 };
 
+const updateEvent = (event) => {
+  console.warn(event);
+  fetch(`${clientCredentials.databaseURL}events/${event.id}`, {
+    method: 'PUT',
+    body: JSON.stringify(event),
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
+};
+
+const getSingleEvent = (eventId) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}events/${eventId}`)
+    .then((response) => response.json())
+    .then(resolve)
+    .catch(reject);
+});
+
 // eslint-disable-next-line import/prefer-default-export
-export { getEvents, createEvent };
+export {
+  getEvents, createEvent, updateEvent, getSingleEvent,
+};
