@@ -44,11 +44,17 @@ const getSingleEvent = (eventId) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const leaveEvent = (eventId) => {
+const leaveEvent = (eventId, userId) => new Promise((resolve, reject) => {
   fetch(`${clientCredentials.databaseURL}events/${eventId}/leave`, {
     method: 'DELETE',
-  });
-};
+    body: JSON.stringify(userId),
+    headers: {
+      'content-type': 'application/json',
+    },
+  })
+    .then(resolve)
+    .catch(reject);
+});
 
 const joinEvent = (eventId, userId) => {
   console.warn(eventId, userId);
