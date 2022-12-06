@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import Router from 'next/router';
-import { deleteEvent } from '../../utils/data/eventData';
+import { deleteEvent, joinEvent, leaveEvent } from '../../utils/data/eventData';
 
 const EventCard = ({
   description,
@@ -12,6 +12,8 @@ const EventCard = ({
   eventId,
   // eslint-disable-next-line react/prop-types
   refresh,
+  joined,
+  userId,
 }) => (
   <Card className="text-center">
     <Card.Header>{description}</Card.Header>
@@ -35,6 +37,29 @@ const EventCard = ({
     >
       Delete Event
     </Button>
+    {
+      joined
+        ? (
+          <Button
+            onClick={() => {
+              leaveEvent(eventId, userId);
+              refresh();
+            }}
+          >
+            Leave Event
+          </Button>
+        )
+        : (
+          <Button
+            onClick={() => {
+              joinEvent(eventId, userId);
+              refresh();
+            }}
+          >
+            Join Event
+          </Button>
+        )
+    }
   </Card>
 );
 
@@ -44,6 +69,8 @@ EventCard.propTypes = {
   time: PropTypes.string.isRequired,
   organizer: PropTypes.string.isRequired,
   eventId: PropTypes.number.isRequired,
+  joined: PropTypes.bool.isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 export default EventCard;

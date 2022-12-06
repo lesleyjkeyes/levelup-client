@@ -1,7 +1,11 @@
 import { clientCredentials } from '../client';
 
-const getEvents = () => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/events`)
+const getEvents = (uid) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/events`, {
+    headers: {
+      Authorization: uid,
+    },
+  })
     .then((response) => response.json())
     .then(resolve)
     .catch(reject);
@@ -40,7 +44,30 @@ const getSingleEvent = (eventId) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const leaveEvent = (eventId, userId) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}events/${eventId}/leave`, {
+    method: 'DELETE',
+    body: JSON.stringify(userId),
+    headers: {
+      'content-type': 'application/json',
+    },
+  })
+    .then(resolve)
+    .catch(reject);
+});
+
+const joinEvent = (eventId, userId) => {
+  console.warn(eventId, userId);
+  fetch(`${clientCredentials.databaseURL}/events/${eventId}/signup`, {
+    method: 'POST',
+    body: JSON.stringify(userId),
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
+};
+
 // eslint-disable-next-line import/prefer-default-export
 export {
-  getEvents, createEvent, updateEvent, getSingleEvent, deleteEvent,
+  getEvents, createEvent, updateEvent, getSingleEvent, deleteEvent, leaveEvent, joinEvent,
 };
